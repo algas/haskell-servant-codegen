@@ -28,8 +28,8 @@ import qualified Data.Text as T
 instance ToText [String] where
     toText = T.pack . intercalate ","
 
-lkp l = case lookup l inputs of
-        Nothing -> Left $ "label " ++ Te.unpack l ++ " not found"
+lkp inputs l = case lookup l inputs of
+        Nothing -> Left $ "label " ++ T.unpack l ++ " not found"
         Just v  -> Right $ read (T.unpack v)
 
 {{#operations}}
@@ -41,7 +41,7 @@ data Form{{#formParams}}{{baseName}}{{/formParams}} = Form{{#formParams}}{{baseN
     }
 
 instance FromFormUrlEncoded Form{{#formParams}}{{baseName}}{{/formParams}} where
-    fromFormUrlEncoded inputs = Form{{#formParams}}{{baseName}}{{/formParams}} <$> {{#formParams}}lkp "{{baseName}}"{{#hasMore}} <*> {{/hasMore}}{{/formParams}}
+    fromFormUrlEncoded inputs = Form{{#formParams}}{{baseName}}{{/formParams}} <$> {{#formParams}}lkp inputs "{{baseName}}"{{#hasMore}} <*> {{/hasMore}}{{/formParams}}
 
 {{/hasFormParams}}
 {{/operation}}
@@ -78,6 +78,5 @@ parseHostPort path = (host,port)
 {{#operation}}
 {{operationId}}{{#hasMore}}
     :<|> {{/hasMore}}{{/operation}}
+    = client proxy{{classname}} $ BaseUrl Http host port
 {{/operations}}
-    = client proxy $ BaseUrl Http host port
-
