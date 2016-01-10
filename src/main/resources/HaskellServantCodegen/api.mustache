@@ -6,9 +6,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 {{#operations}}
-module {{package}}.{{classname}} where
+module {{package}}.{{classname}} (
+      {{#operation}}{{operationId}}{{#hasMore}}
+    , {{/hasMore}}{{/operation}}
+    , proxy{{classname}}
+    ) where
 {{/operations}}
-{{host}}
 
 import Data.Proxy
 import Servant.API
@@ -25,13 +28,32 @@ import qualified Data.Text as T
 instance ToText [String] where
     toText = T.pack . intercalate ","
 
+lkp l = case lookup l inputs of
+        Nothing -> Left $ "label " ++ Te.unpack l ++ " not found"
+        Just v  -> Right $ read (T.unpack v)
+
+{{#operations}}
+{{#operation}}
+{{#hasFormParams}}
+data Form{{#formParams}}{{baseName}}{{/formParams}} = Form{{#formParams}}{{baseName}}{{/formParams}}
+    { {{#formParams}}{{baseName}} :: {{dataType}}{{#hasMore}}
+    , {{/hasMore}}{{/formParams}}
+    }
+
+instance FromFormUrlEncoded Form{{#formParams}}{{baseName}}{{/formParams}} where
+    fromFormUrlEncoded inputs = Form{{#formParams}}{{baseName}}{{/formParams}} <$> {{#formParams}}lkp "{{baseName}}"{{#hasMore}} <*> {{/hasMore}}{{/formParams}}
+
+{{/hasFormParams}}
+{{/operation}}
+{{/operations}}
+
 {{#operations}}
 type {{classname}} = {{#operation}}{{& nickname}} -- {{operationId}}{{#hasMore}}
     :<|> {{/hasMore}}{{/operation}}
 {{/operations}}
 
-proxy :: Proxy {{classname}}
-proxy = Proxy
+proxy{{classname}} :: Proxy {{classname}}
+proxy{{classname}} = Proxy
 
 {{#operations}}
 

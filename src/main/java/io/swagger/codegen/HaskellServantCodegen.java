@@ -173,7 +173,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
    */
   @Override
   public String escapeReservedWord(String name) {
-    return "_" + name;  // add an underscore to the name
+    return name + "_";
   }
 
   /**
@@ -259,14 +259,16 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
     return path;
   }
 
-
-
-  // private String addFormParams(String path, List<CodegenParameter> formParams) {
-  //   for (CodegenParameter p : formParams) {
-  //     path += " :> QueryParam \"" + p.baseName + "\" " + p.dataType;
-  //   }
-  //   return path;
-  // }
+  private String formPath(String path, List<CodegenParameter> formParams) {
+    String names = "Form";
+    for (CodegenParameter p : formParams) {
+      names += p.baseName;
+    }
+    if(formParams.size() > 0){
+      path += " :> ReqBody '[FormUrlEncoded] " + names;
+    }
+    return path;
+  }
 
   private String filterReturnType(String rt) {
     if (rt == null || rt.equals("null")) {
@@ -319,7 +321,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
   public CodegenOperation fromOperation(String resourcePath, String httpMethod, Operation operation, Map<String, Model> definitions, Swagger swagger){
     CodegenOperation op = super.fromOperation(resourcePath, httpMethod, operation, definitions, swagger);
     String path = op.path;
-    op.nickname = addReturnPath(bodyPath(queryPath(capturePath(replacePathSplitter(path), op.pathParams), op.queryParams), op.bodyParams), op.httpMethod, op.returnType);
+    op.nickname = addReturnPath(formPath(bodyPath(queryPath(capturePath(replacePathSplitter(path), op.pathParams), op.queryParams), op.bodyParams), op.formParams), op.httpMethod, op.returnType);
     return op;
   }
 

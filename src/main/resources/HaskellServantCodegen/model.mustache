@@ -21,7 +21,7 @@ import GHC.Generics
 {{#model}}
 
 data {{classname}} = {{classname}}
-    { {{#vars}}{{name}} :: {{datatype}}{{#hasMore}}
+    { {{#vars}}{{& name}} :: {{datatype}}{{#hasMore}}
     , {{/hasMore}}{{/vars}}
     } deriving (Show, Eq, Generic)
 
