@@ -252,6 +252,22 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
     return path;
   }
 
+  private String bodyPath(String path, List<CodegenParameter> bodyParams) {
+    for (CodegenParameter p : bodyParams) {
+      path += " :> ReqBody '[JSON] " + p.dataType;
+    }
+    return path;
+  }
+
+
+
+  // private String addFormParams(String path, List<CodegenParameter> formParams) {
+  //   for (CodegenParameter p : formParams) {
+  //     path += " :> QueryParam \"" + p.baseName + "\" " + p.dataType;
+  //   }
+  //   return path;
+  // }
+
   private String filterReturnType(String rt) {
     if (rt == null || rt.equals("null")) {
       return "()";
@@ -303,7 +319,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
   public CodegenOperation fromOperation(String resourcePath, String httpMethod, Operation operation, Map<String, Model> definitions, Swagger swagger){
     CodegenOperation op = super.fromOperation(resourcePath, httpMethod, operation, definitions, swagger);
     String path = op.path;
-    op.nickname = addReturnPath(queryPath(capturePath(replacePathSplitter(path), op.pathParams), op.queryParams), op.httpMethod, op.returnType);
+    op.nickname = addReturnPath(bodyPath(queryPath(capturePath(replacePathSplitter(path), op.pathParams), op.queryParams), op.bodyParams), op.httpMethod, op.returnType);
     return op;
   }
 
