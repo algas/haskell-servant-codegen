@@ -140,7 +140,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
         "Char",
         "Double",
         "List",
-        "File"
+        "FilePath"
         )
     );
 
@@ -159,7 +159,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
     typeMapping.put("double", "Double");
     typeMapping.put("DateTime", "Integer");
     // typeMapping.put("object", "Map");
-    typeMapping.put("file", "File");
+    typeMapping.put("file", "FilePath");
 
     importMapping.clear();
     importMapping.put("Map", "qualified Data.Map as Map");
@@ -262,6 +262,9 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
   private String formPath(String path, List<CodegenParameter> formParams) {
     String names = "Form";
     for (CodegenParameter p : formParams) {
+      if(p.dataType.equals("FilePath")){
+        // file data processing
+      } 
       names += p.baseName;
     }
     if(formParams.size() > 0){

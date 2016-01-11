@@ -13,6 +13,7 @@ module {{package}}.{{classname}} (
     ) where
 {{/operations}}
 
+import GHC.Generics
 import Data.Proxy
 import Servant.API
 import Servant.Client
@@ -38,10 +39,13 @@ lkp inputs l = case lookup l inputs of
 data Form{{#formParams}}{{baseName}}{{/formParams}} = Form{{#formParams}}{{baseName}}{{/formParams}}
     { {{#formParams}}{{baseName}} :: {{dataType}}{{#hasMore}}
     , {{/hasMore}}{{/formParams}}
-    }
+    } deriving (Show, Eq, Generic)
 
 instance FromFormUrlEncoded Form{{#formParams}}{{baseName}}{{/formParams}} where
-    fromFormUrlEncoded inputs = Form{{#formParams}}{{baseName}}{{/formParams}} <$> {{#formParams}}lkp inputs "{{baseName}}"{{#hasMore}} <*> {{/hasMore}}{{/formParams}}
+--    fromFormUrlEncoded = return
+--    fromFormUrlEncoded inputs = Form{{#formParams}}{{baseName}}{{/formParams}} <$> {{#formParams}}lkp inputs "{{baseName}}"{{#hasMore}} <*> {{/hasMore}}{{/formParams}}
+instance ToFormUrlEncoded Form{{#formParams}}{{baseName}}{{/formParams}} where
+--    toFormUrlEncoded = Prelude.id
 
 {{/hasFormParams}}
 {{/operation}}
