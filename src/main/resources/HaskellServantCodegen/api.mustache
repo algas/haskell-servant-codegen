@@ -10,6 +10,7 @@ module {{package}}.{{classname}} (
       {{#operation}}{{operationId}}{{#hasMore}}
     , {{/hasMore}}{{/operation}}
     , proxy{{classname}}
+    , {{classname}}
     ) where
 {{/operations}}
 
@@ -22,16 +23,9 @@ import Data.Maybe (fromMaybe)
 import Servant.Common.Text
 import Data.List (intercalate)
 import qualified Data.Text as T
-
+import Utils
 {{#imports}}import {{import}}
 {{/imports}}
-
-instance ToText [String] where
-    toText = T.pack . intercalate ","
-
-lkp inputs l = case lookup l inputs of
-        Nothing -> Left $ "label " ++ T.unpack l ++ " not found"
-        Just v  -> Right $ read (T.unpack v)
 
 {{#operations}}
 {{#operation}}
@@ -42,11 +36,10 @@ data Form{{#formParams}}{{baseName}}{{/formParams}} = Form{{#formParams}}{{baseN
     } deriving (Show, Eq, Generic)
 
 instance FromFormUrlEncoded Form{{#formParams}}{{baseName}}{{/formParams}} where
---    fromFormUrlEncoded = return
---    fromFormUrlEncoded inputs = Form{{#formParams}}{{baseName}}{{/formParams}} <$> {{#formParams}}lkp inputs "{{baseName}}"{{#hasMore}} <*> {{/hasMore}}{{/formParams}}
+{{#formParams}}lkp inputs "{{baseName}}"{{#hasMore}} <*> {{/hasMore}}{{/formParams}}
 instance ToFormUrlEncoded Form{{#formParams}}{{baseName}}{{/formParams}} where
---    toFormUrlEncoded = Prelude.id
-
+instance Arbitrary Form{{#formParams}}{{baseName}}{{/formParams}} where
+    arbitrary = Form{{#formParams}}{{baseName}}{{/formParams}} <$> {{#formParams}}arbitrary{{#hasMore}} <*> {{/hasMore}}{{/formParams}}
 {{/hasFormParams}}
 {{/operation}}
 {{/operations}}

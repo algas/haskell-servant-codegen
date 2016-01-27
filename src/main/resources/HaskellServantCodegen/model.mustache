@@ -27,6 +27,7 @@ data {{classname}} = {{classname}}
 
 instance FromJSON {{classname}}
 instance ToJSON {{classname}}
-
+instance Arbitrary {{classname}} where
+    arbitrary = {{classname}} <$> {{#vars}}arbitrary{{#hasMore}} <*> {{/hasMore}}{{/vars}}
 {{/model}}
 {{/models}}

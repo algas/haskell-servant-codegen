@@ -79,7 +79,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
     /**
      * Api Package.  Optional, if needed, this can be used in templates
      */
-    apiPackage = "Client";
+    apiPackage = "Api";
 
     /**
      * Model Package.  Optional, if needed, this can be used in templates
@@ -97,6 +97,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
             "default", "deriving", // "deriving instance",
             "do",
             "forall", "foreign", "hiding",
+            "id",
             "if", "then", "else",
             "import", "infix", "infixl", "infixr",
             "instance", "let", "in",
@@ -123,7 +124,8 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
     supportingFiles.add(new SupportingFile("haskell-servant-codegen.mustache", "", "haskell-servant-codegen.cabal"));
     supportingFiles.add(new SupportingFile("Setup.mustache", "", "Setup.hs"));
     supportingFiles.add(new SupportingFile("LICENSE", "", "LICENSE"));
-    supportingFiles.add(new SupportingFile("Dummy.mustache", "lib/Model", "Dummy.hs"));
+    supportingFiles.add(new SupportingFile("Apis.mustache", "lib", "Apis.hs"));
+    supportingFiles.add(new SupportingFile("Utils.mustache", "lib", "Utils.hs"));
     supportingFiles.add(new SupportingFile("Client.mustache", "client", "Main.hs"));
 
     /**
@@ -190,7 +192,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
    */
   @Override
   public String apiFileFolder() {
-    return outputFolder + File.separatorChar + "client" + File.separatorChar + apiPackage().replace('.', File.separatorChar);
+    return outputFolder + File.separatorChar + "lib" + File.separatorChar + apiPackage().replace('.', File.separatorChar);
   }
 
   /**
