@@ -127,6 +127,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
     supportingFiles.add(new SupportingFile("Apis.mustache", "lib", "Apis.hs"));
     supportingFiles.add(new SupportingFile("Utils.mustache", "lib", "Utils.hs"));
     supportingFiles.add(new SupportingFile("Client.mustache", "client", "Main.hs"));
+    supportingFiles.add(new SupportingFile("Server.mustache", "server", "Main.hs"));
 
     /**
      * Language Specific Primitives.  These types will not trigger imports by

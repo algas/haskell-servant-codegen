@@ -5,10 +5,13 @@
 module Main where
 
 import Apis
-{{#models}}{{#model}}import Model.{{classname}}{{/model}}{{/models}}
+{{#models}}
+{{#model}}import Model.{{classname}}{{/model}}
+{{/models}}
 import Servant
 import Servant.Mock
 import qualified Network.Wai.Handler.Warp as Warp
 
 main :: IO ()
-main = Warp.run 8080 $ serve api (mock api)
+--main = Warp.run 8080 $ serve api (mock api)
+main = print "mock"

@@ -4,8 +4,8 @@
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE FlexibleInstances #-}
 module Apis (
-      api
-    , API
+--      api
+--    , API
     ) where
 
 {{#operations}}{{#operation}}
@@ -19,5 +19,5 @@ import Utils
 
 --type API = PetApi :<|> StoreApi :<|> UserApi
 
-api :: Proxy API
-api = Proxy
+--api :: Proxy API
+--api = Proxy
