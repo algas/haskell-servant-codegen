@@ -144,8 +144,8 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
         "Float",
         "Char",
         "Double",
-        "List"
-        // "FilePath"
+        "List",
+        "FilePath"
         )
     );
 
@@ -164,7 +164,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
     typeMapping.put("double", "Double");
     typeMapping.put("DateTime", "Integer");
     // typeMapping.put("object", "Map");
-    typeMapping.put("file", "String");
+    typeMapping.put("file", "FilePath");
 
     importMapping.clear();
     importMapping.put("Map", "qualified Data.Map as Map");
