@@ -23,7 +23,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
    * @see     io.swagger.codegen.CodegenType
    */
   public CodegenType getTag() {
-    return CodegenType.CLIENT;
+    return CodegenType.SERVER;
   }
 
   /**
@@ -43,7 +43,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
    * @return A string value for the help message
    */
   public String getHelp() {
-    return "Generates a HaskellServantCodegen client library.";
+    return "Generates a HaskellServantCodegen library.";
   }
 
   public HaskellServantCodegen() {

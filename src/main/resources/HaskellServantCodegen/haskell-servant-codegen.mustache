@@ -16,7 +16,7 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      lib
   exposed-modules:     Utils{{#models}}{{#model}}
-                     , Model.{{classname}}{{/model}}{{/models}}
+                     , {{importPath}}{{/model}}{{/models}}
 {{#apiInfo}}
 {{#apis}}
                      , {{package}}.{{classname}}
