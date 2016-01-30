@@ -37,11 +37,13 @@ data Form{{#formParams}}{{baseName}}{{/formParams}} = Form{{#formParams}}{{baseN
     } deriving (Show, Eq, Generic)
 
 instance FromFormUrlEncoded Form{{#formParams}}{{baseName}}{{/formParams}} where
-{{#formParams}}lkp inputs "{{baseName}}"{{#hasMore}} <*> {{/hasMore}}{{/formParams}}
+    fromFormUrlEncoded inputs = Form{{#formParams}}{{baseName}}{{/formParams}} <$> {{#formParams}} lkp inputs "{{baseName}}"{{#hasMore}} <*> {{/hasMore}}{{/formParams}}
 instance ToFormUrlEncoded Form{{#formParams}}{{baseName}}{{/formParams}} where
+    toFormUrlEncoded x = [({{#formParams}}(T.pack $ show $ {{package}}.{{classname}}.{{baseName}} x){{#hasMore}}, {{/hasMore}}{{/formParams}})]
 instance Arbitrary Form{{#formParams}}{{baseName}}{{/formParams}} where
     arbitrary = Form{{#formParams}}{{baseName}}{{/formParams}} <$> {{#formParams}}arbitrary{{#hasMore}} <*> {{/hasMore}}{{/formParams}}
 {{/hasFormParams}}
+
 {{/operation}}
 {{/operations}}
 

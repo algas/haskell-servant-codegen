@@ -14,6 +14,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
   // source folder where to write the files
   protected String sourceFolder = "src";
   protected String apiVersion = "0.0.1";
+  protected List<String> opIds = new ArrayList<String>();
 
   /**
    * Configures the type of generator.
@@ -113,6 +114,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
      * are available in models, apis, and supporting files
      */
     additionalProperties.put("apiVersion", apiVersion);
+    additionalProperties.put("opIds", opIds);
 
     /**
      * Supporting Files.  You can write single files for the generator with the
@@ -142,8 +144,8 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
         "Float",
         "Char",
         "Double",
-        "List",
-        "FilePath"
+        "List"
+        // "FilePath"
         )
     );
 
@@ -162,7 +164,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
     typeMapping.put("double", "Double");
     typeMapping.put("DateTime", "Integer");
     // typeMapping.put("object", "Map");
-    typeMapping.put("file", "FilePath");
+    typeMapping.put("file", "String");
 
     importMapping.clear();
     importMapping.put("Map", "qualified Data.Map as Map");
@@ -335,6 +337,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
   public CodegenOperation fromOperation(String resourcePath, String httpMethod, Operation operation, Map<String, Model> definitions, Swagger swagger){
     CodegenOperation op = super.fromOperation(resourcePath, httpMethod, operation, definitions, swagger);
     String path = op.path;
+    opIds.add(op.operationId);
     op.nickname = addReturnPath(headerPath(formPath(bodyPath(queryPath(capturePath(replacePathSplitter(path), op.pathParams), op.queryParams), op.bodyParams), op.formParams), op.headerParams), op.httpMethod, op.returnType);
     return op;
   }
